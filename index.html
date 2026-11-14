@@ -1,1 +1,1487 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2b6cb0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Akij Stuff mass 2</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: #f0f4f8; color: #1a202c; }
+  .container { max-width: 900px; margin: 0 auto; padding: 15px; }
+  h1 { text-align: center; background: #2b6cb0; color: white; margin: -15px -15px 15px -15px; padding: 18px; font-size: 1.3rem; }
+  .card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+  .tabs { display: flex; gap: 6px; margin-bottom: 15px; flex-wrap: wrap; }
+  .tab { flex: 1; min-width: 70px; padding: 10px 4px; border: none; background: #cbd5e0; color: #2d3748; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; font-size: 0.82rem; }
+  .tab.active { background: #2b6cb0; color: white; }
+  .section { display: none; }
+  .section.active { display: block; }
+  label { display: block; margin: 10px 0 5px; font-weight: 600; font-size: 0.95rem; }
+  input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 1rem; }
+  button.action { margin-top: 12px; width: 100%; padding: 12px; background: #38a169; color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  button.action:hover { background: #2f855a; }
+  button.danger { background: #e53e3e; }
+  button.danger:hover { background: #c53030; }
+  button.small { padding: 6px 10px; font-size: 0.85rem; width: auto; margin-top: 0; }
+  button.secondary { background: #4299e1; }
+  button.secondary:hover { background: #3182ce; }
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.92rem; }
+  th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: center; }
+  th { background: #edf2f7; font-weight: 700; }
+  tr:nth-child(even) { background: #f7fafc; }
+  .summary-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px; }
+  .summary-item { background: #ebf8ff; padding: 12px; border-radius: 8px; text-align: center; border-left: 4px solid #2b6cb0; }
+  .summary-item h3 { margin: 0 0 5px 0; font-size: 0.9rem; color: #4a5568; }
+  .summary-item p { margin: 0; font-size: 1.2rem; font-weight: 700; color: #2b6cb0; }
+  .due { color: #e53e3e; font-weight: 700; }
+  .advance { color: #38a169; font-weight: 700; }
+  .neutral { color: #4a5568; }
+  .month-selector { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; }
+  .month-selector select, .month-selector input { flex: 1; }
+  .hidden { display: none !important; }
+  .person-meal-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; padding: 10px; background: #f7fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
+  .person-meal-row label.name { flex: 2; margin: 0; font-weight: 600; font-size: 1rem; }
+  .toggle-wrap { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .toggle-wrap span { font-size: 0.85rem; color: #718096; }
+  .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 26px; }
+  .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+  .switch input:checked + .slider { background-color: #38a169; }
+  .switch input:checked + .slider:before { transform: translateX(24px); }
+  .ate-yes { color: #38a169; font-weight: 700; }
+  .ate-no { color: #a0aec0; }
+  #loginScreen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; overflow-y: auto; padding: 20px 0; }
+  .login-box { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); margin: auto; }
+  .login-box h2 { text-align: center; color: #2b6cb0; margin-bottom: 20px; }
+  .login-box .logo { text-align: center; font-size: 3rem; margin-bottom: 10px; }
+  .login-error { color: #e53e3e; text-align: center; font-size: 0.9rem; margin-top: 10px; display: none; }
+  .login-info { background: #ebf8ff; padding: 10px; border-radius: 6px; text-align: center; margin-bottom: 15px; font-size: 0.85rem; color: #2b6cb0; }
+  .login-type-tabs { display: flex; gap: 6px; margin-bottom: 15px; }
+  .login-type-tab { flex: 1; padding: 10px; border: none; background: #e2e8f0; color: #4a5568; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; }
+  .login-type-tab.active { background: #2b6cb0; color: white; }
+  .report-header { text-align: center; padding: 20px; background: #2b6cb0; color: white; border-radius: 10px; margin-bottom: 15px; }
+  .report-header h2 { margin: 0 0 8px 0; font-size: 1.4rem; }
+  .report-header p { margin: 4px 0; font-size: 0.95rem; }
+  .report-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+  .report-meta .meta-item { background: #ebf8ff; padding: 10px; border-radius: 8px; text-align: center; }
+  .report-meta .meta-item label { margin: 0 0 4px 0; font-size: 0.8rem; color: #4a5568; }
+  .report-meta .meta-item div { font-weight: 700; color: #2b6cb0; }
+  .total-footer { background: #2b6cb0; color: white; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; }
+  .total-footer h3 { margin: 0; font-size: 1.1rem; }
+  .total-footer p { margin: 5px 0 0 0; font-size: 1.3rem; font-weight: 700; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .info-box { background: #f0fff4; border: 1px solid #9ae6b4; padding: 12px; border-radius: 8px; margin-bottom: 15px; color: #22543d; }
+  .current-cred { background: #ebf8ff; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #2b6cb0; }
+  .current-cred p { margin: 4px 0; font-size: 0.95rem; }
+  .member-welcome { background: #f0fff4; border: 1px solid #9ae6b4; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; position: relative; }
+  .member-welcome h2 { margin: 0 0 5px 0; color: #22543d; }
+  .member-welcome p { margin: 0; color: #38a169; font-weight: 600; }
+  .read-only-badge { display: inline-block; background: #ebf8ff; color: #2b6cb0; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-bottom: 10px; }
+  .dept-badge { display: inline-block; background: #bee3f8; color: #2b6cb0; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; margin-left: 5px; }
+  .dept-section { margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+  .dept-header { background: #2b6cb0; color: white; padding: 12px 15px; font-weight: 700; font-size: 1rem; }
+  .dept-body { padding: 10px; background: #f7fafc; }
+  .dept-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 10px; }
+  .dept-summary-item { background: white; padding: 10px; border-radius: 8px; text-align: center; border-left: 3px solid #2b6cb0; }
+  .dept-summary-item h4 { margin: 0 0 4px 0; font-size: 0.75rem; color: #718096; }
+  .dept-summary-item p { margin: 0; font-size: 1rem; font-weight: 700; color: #2b6cb0; }
+  .settings-box { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+  .settings-box h3 { margin: 0 0 12px 0; color: #2d3748; font-size: 1.05rem; }
+  .version-text { text-align: center; font-size: 0.75rem; color: #a0aec0; margin-top: 15px; }
+  .logout-bar { text-align: right; margin-bottom: 10px; }
+  .logout-bar button { background: #e53e3e; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: 600; }
+  .logout-bar button:hover { background: #c53030; }
+  @media print { .tabs, button, .no-print, #loginScreen, .logout-bar { display: none !important; } .section { display: block !important; } body { background: white; } .card { box-shadow: none; border: 1px solid #e2e8f0; } }
+</style>
+</head>
+<body>
 
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="logo">🍽</div>
+    <h2>Akij Stuff mass 2</h2>
+    <div class="login-info">মেস সদস্য এবং ম্যানেজার উভয়েই লগইন করতে পারবেন</div>
+    <div class="login-type-tabs">
+      <button class="login-type-tab active" onclick="setLoginType('admin')">👤 ম্যানেজার</button>
+      <button class="login-type-tab" onclick="setLoginType('member')">🙋 সদস্য</button>
+    </div>
+    <div id="adminLoginForm">
+      <label>ম্যানেজার আইডি</label>
+      <input type="text" id="adminLoginId" placeholder="আইডি লিখুন">
+      <label>পাসওয়ার্ড</label>
+      <input type="password" id="adminLoginPass" placeholder="পাসওয়ার্ড লিখুন">
+      <button class="action" onclick="doAdminLogin()" style="margin-top:15px;">ম্যানেজার হিসেবে প্রবেশ</button>
+    </div>
+    <div id="memberLoginForm" class="hidden">
+      <label>সদস্য আইডি</label>
+      <input type="text" id="memberLoginId" placeholder="সদস্য আইডি">
+      <label>পাসওয়ার্ড</label>
+      <input type="password" id="memberLoginPass" placeholder="পাসওয়ার্ড">
+      <button class="action" onclick="doMemberLogin()" style="margin-top:15px;">সদস্য হিসেবে প্রবেশ</button>
+    </div>
+    <p class="login-error" id="loginError"></p>
+    <div style="text-align:center;margin-top:12px;">
+      <button onclick="resetLogin()" style="background:none;border:none;color:#e53e3e;text-decoration:underline;cursor:pointer;font-size:0.85rem;">🔄 ডিফল্টে রিসেট করুন</button>
+    </div>
+    <p class="version-text">v4.5 | ডিফল্ট: manager / manager (নিজে লিখুন)</p>
+  </div>
+</div>
+
+<div id="mainApp" class="hidden">
+<div class="container">
+  <div class="logout-bar no-print" id="logoutBar">
+    <button onclick="doLogout()">🔒 লগআউট</button>
+  </div>
+
+  <h1>🍽️ Akij Stuff mass 2</h1>
+
+  <div id="memberWelcome" class="member-welcome hidden">
+    <h2>🙋 স্বাগতম, <span id="welcomeMemberName">-</span>!</h2>
+    <p>আপনি সদস্য হিসেবে লগইন করেছেন (শুধু দেখার অনুমতি)</p>
+    <button class="action no-print" onclick="doLogout()" style="margin-top:10px;background:#e53e3e;width:auto;padding:8px 20px;font-size:0.9rem;">🔒 লগআউট</button>
+  </div>
+
+  <div class="tabs no-print" id="mainTabs">
+    <button class="tab active" onclick="showTab('members')">সদস্য</button>
+    <button class="tab" onclick="showTab('meals')">মিল</button>
+    <button class="tab" onclick="showTab('bazar')">বাজার</button>
+    <button class="tab" onclick="showTab('deposit')">জমা</button>
+    <button class="tab" onclick="showTab('report')">হিসাব</button>
+    <button class="tab" onclick="showTab('hisab')">বিভাগ হিসাব</button>
+    <button class="tab" onclick="showTab('monthend')">মাস শেষ</button>
+    <button class="tab" onclick="showTab('history')">সব মাস</button>
+    <button class="tab" onclick="showTab('settings')">⚙️</button>
+  </div>
+
+  <div id="members" class="section active">
+    <div class="card admin-only">
+      <h2>সদস্য যোগ করুন</h2>
+      <label>নাম *</label>
+      <input type="text" id="memberName" placeholder="যেমন: রাহুল">
+      <label>বিভাগ/ডপার্টমেন্ট *</label>
+      <input type="text" id="memberDept" placeholder="যেমন: প্রোডাকশন, HR, অ্যাকাউন্টস">
+      <label>মোবাইল নম্বর</label>
+      <input type="text" id="memberPhone" placeholder="01XXXXXXXXX">
+      <div class="info-box">সদস্যের লগইন আইডি ও পাসওয়ার্ড আপনি পরে "সদস্য লগইন তথ্য" থেকে নিজে সেট করতে পারবেন।</div>
+      <button class="action" onclick="addMember()">সদস্য যোগ করুন</button>
+    </div>
+    <div class="card">
+      <h2>সদস্য তালিকা</h2>
+      <div id="memberList"></div>
+    </div>
+    <div class="card admin-only">
+      <h2>🔐 সদস্য লগইন থ্য (আইডি/পাসওয়ার্ড সেট করুন)</h2>
+      <div class="info-box">নিচের তালিকা থেকে "সম্পাদনা" বাটন চেপে প্রতিটি সদস্যের জন্য লগইন আইডি ও পাসওয়ার্ড সেট করুন। আইডি/পাসওয়ার্ড সেট করা সদস্যরা নিজে লগইন করে হিসাব দেখতে পারবে।</div>
+      <div id="memberLoginInfo"></div>
+    </div>
+  </div>
+
+  <div id="meals" class="section">
+    <div class="card admin-only">
+      <h2>দৈনিক মিল এন্ট্রি (খেয়েছে = ১, খায়নি = ০)</h2>
+      <div class="month-selector">
+        <select id="mealMonth"></select>
+        <input type="date" id="mealDate">
+      </div>
+      <div id="mealInputs"></div>
+      <button class="action" onclick="saveMeals()">মিল সেভ করুন</button>
+    </div>
+    <div class="card member-view">
+      <span class="read-only-badge">📖 শুধু দেখার জন্য</span>
+      <h2>এই মাসে মিল তালিকা</h2>
+      <div id="mealTable"></div>
+    </div>
+  </div>
+
+  <div id="bazar" class="section">
+    <div class="card admin-only">
+      <h2>বাজার খরচ এন্ট্রি</h2>
+      <label>তারিখ</label>
+      <input type="date" id="bazarDate">
+      <label>বাজারকারী</label>
+      <select id="bazarPerson"></select>
+      <label>বিবরণ</label>
+      <input type="text" id="bazarDesc" placeholder="যেমন: চাল, ডাল, সজি">
+      <label>টাকা</label>
+      <input type="number" id="bazarAmount" placeholder="0">
+      <button class="action" onclick="addBazar()">বাজার যোগ করুন</button>
+    </div>
+    <div class="card member-view">
+      <span class="read-only-badge">📖 শুধু দেখার জন্য</span>
+      <h2>বাজার তালিকা</h2>
+      <div class="month-selector">
+        <select id="bazarMonth"></select>
+      </div>
+      <div id="bazarTable"></div>
+    </div>
+  </div>
+
+  <div id="deposit" class="section">
+    <div class="card admin-only">
+      <h2>জমা (ডিপোজিট) এন্ট্রি</h2>
+      <label>তারিখ</label>
+      <input type="date" id="depositDate">
+      <label>সদস্য</label>
+      <select id="depositPerson"></select>
+      <label>টাকা</label>
+      <input type="number" id="depositAmount" placeholder="0">
+      <button class="action" onclick="addDeposit()">জমা যোগ করুন</button>
+    </div>
+    <div class="card member-view">
+      <span class="read-only-badge">📖 শুধু দেখার জন্য</span>
+      <h2>জমার তালিকা</h2>
+      <div class="month-selector">
+        <select id="depositMonth"></select>
+      </div>
+      <div id="depositTable"></div>
+    </div>
+  </div>
+
+  <div id="report" class="section">
+    <div class="card">
+      <h2>মাসিক হিসাব</h2>
+      <div class="month-selector">
+        <select id="reportMonth" onchange="renderReport()"></select>
+        <button class="action small no-print" onclick="window.print()">🖨️ প্রিন্ট</button>
+      </div>
+      <div id="reportSummary"></div>
+      <div id="reportDetails"></div>
+    </div>
+  </div>
+
+  <div id="hisab" class="section">
+    <div class="card">
+      <h2>📊 বিভাগ অনুযায়ী হিসাব</h2>
+      <div class="month-selector">
+        <select id="hisabMonth" onchange="renderHisab()"></select>
+        <button class="action small no-print" onclick="window.print()">🖨️ প্রিন্ট</button>
+      </div>
+      <div id="hisabSummary"></div>
+      <div id="hisabDetails"></div>
+    </div>
+  </div>
+
+  <div id="monthend" class="section">
+    <div class="card admin-only no-print">
+      <h2>মাস শেষের রিপোর্ট সেটিংস</h2>
+      <div class="two-col">
+        <div><label>মাসের নাম</label><input type="text" id="meMonthName" placeholder="যেমন: নভেম্বর"></div>
+        <div><label>ম্যানেজারের নাম</label><input type="text" id="meManager" placeholder="যেমন: করিম সাহেব"></div>
+      </div>
+      <div class="two-col" style="margin-top:10px;">
+        <div><label>শুরুর তারিখ</label><input type="date" id="meStartDate"></div>
+        <div><label>শেষ তারিখ</label><input type="date" id="meEndDate"></div>
+      </div>
+      <button class="action" onclick="generateMonthEnd()" style="margin-top:15px;">রিপোর্ট তৈরি করুন</button>
+    </div>
+    <div id="monthEndReport"></div>
+  </div>
+
+  <div id="history" class="section">
+    <div class="card">
+      <h2>সব মাসের সারাংশ</h2>
+      <div id="allMonthsSummary"></div>
+    </div>
+    <div class="card">
+      <h2>সব মাসে বিস্তারিত হিসাব</h2>
+      <div id="allMonthsDetails"></div>
+    </div>
+    <div class="card admin-only no-print">
+      <h2>ব্যাকআপ / রিস্টোর</h2>
+      <button class="action" onclick="exportData()">📥 ডাটা ডাউনলোড (JSON)</button>
+      <label style="margin-top:10px;">পূর্বের ডাটা আপলোড করুন</label>
+      <input type="file" id="importFile" accept=".json" onchange="importData(this)">
+      <button class="action danger" onclick="clearAll()" style="margin-top:10px;">🗑️ সব ডাটা মুছে ফেলুন</button>
+    </div>
+  </div>
+
+  <div id="settings" class="section">
+    <div class="card admin-only">
+      <h2>⚙️ ম্যানেজার সেটিংস</h2>
+      <div class="settings-box">
+        <h3>👤 ম্যানেজার লগইন পরিবর্তন</h3>
+        <div class="current-cred">
+          <p><b>বর্তমান ম্যানেজার আইডি:</b> <span id="dispCurrentId">-</span></p>
+        </div>
+        <label>নতুন ম্যানেজার আইডি</label>
+        <input type="text" id="newId" placeholder="নতুন আইডি লিখুন">
+        <label>নতুন পাসওয়ার্ড</label>
+        <input type="password" id="newPass" placeholder="নতুন পাসওয়ার্ড লিখুন">
+        <label>পাসওয়ার্ড আবার লিখুন</label>
+        <input type="password" id="confirmPass" placeholder="পাসওয়ার্ড কনফার্ম করুন">
+        <button class="action" onclick="changeCredentials()">💾 ম্যানেজার আইডি/পাসওয়ার্ড সেভ করুন</button>
+        <p id="credMsg" style="text-align:center;margin-top:10px;font-weight:600;"></p>
+      </div>
+      <div class="settings-box">
+        <h3>🙋 সদস্য লগইন পাসওয়ার্ড সেট/পরিবর্তন</h3>
+        <div class="info-box">নিচে কনো সদস্য বেছে নিয়ে তার লগইন আইডি ও পাসওয়ার্ড সেট বা পরিবর্তন করুন।</div>
+        <label>সদস্য বাছুন</label>
+        <select id="settingsMemberSelect"></select>
+        <label>নতুন আইডি</label>
+        <input type="text" id="settingsMemberNewId" placeholder="নতুন আইডি">
+        <label>নতুন াসওয়ার্ড</label>
+        <input type="text" id="settingsMemberNewPass" placeholder="নতুন পাসওয়ার্ড">
+        <button class="action secondary" onclick="changeMemberCredentialsFromSettings()">💾 সদস্য পাসওয়ার্ড সেভ করুন</button>
+        <p id="memberCredMsg" style="text-align:center;margin-top:10px;font-weight:600;"></p>
+      </div>
+    </div>
+    <div class="card no-print">
+      <h2>🔒 অ্যাকাউন্ট</h2>
+      <button class="action secondary" onclick="doLogout()">লগআউট করুন</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ========== UTILITY ==========
+function $(id) { return document.getElementById(id); }
+const formatMonth = d => d.slice(0,7);
+const todayStr = () => new Date().toISOString().slice(0,10);
+const todayMonth = () => new Date().toISOString().slice(0,7);
+
+// ========== AUTH ==========
+const DEFAULT_ADMIN_ID = 'manager';
+const DEFAULT_ADMIN_PASS = 'manager';
+const ADMIN_CRED_KEY = 'akij_mass2_admin_cred';
+let currentRole = null;
+let currentMemberIdx = null;
+
+function getAdminCred() {
+  try {
+    const raw = localStorage.getItem(ADMIN_CRED_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.id && parsed.pass) return parsed;
+    }
+  } catch(e) {}
+  return { id: DEFAULT_ADMIN_ID, pass: DEFAULT_ADMIN_PASS };
+}
+function saveAdminCred(id, pass) {
+  localStorage.setItem(ADMIN_CRED_KEY, JSON.stringify({ id, pass }));
+}
+
+function setLoginType(type) {
+  document.querySelectorAll('.login-type-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  if (type === 'admin') {
+    $('adminLoginForm').classList.remove('hidden');
+    $('memberLoginForm').classList.add('hidden');
+  } else {
+    $('adminLoginForm').classList.add('hidden');
+    $('memberLoginForm').classList.remove('hidden');
+  }
+  $('loginError').style.display = 'none';
+}
+
+function showLoginError(msg, color) {
+  const el = $('loginError');
+  el.textContent = msg;
+  el.style.color = color || '#e53e3e';
+  el.style.display = 'block';
+}
+
+function doAdminLogin() {
+  const cred = getAdminCred();
+  const id = $('adminLoginId').value.trim().toLowerCase();
+  const pass = $('adminLoginPass').value.trim();
+  if (!id || !pass) { showLoginError('আইডি এবং পাসওয়ার্ড দুটোই দিন!'); return; }
+  if (id === cred.id.toLowerCase() && pass === cred.pass) {
+    currentRole = 'admin'; currentMemberIdx = null;
+    localStorage.setItem('akij_mass2_loggedin', 'true');
+    localStorage.setItem('akij_mass2_role', 'admin');
+    $('loginScreen').classList.add('hidden');
+    $('mainApp').classList.remove('hidden');
+    applyRoleUI();
+    $('loginError').style.display = 'none';
+  } else {
+    showLoginError('ভুল ম্যানেজার আইডি বা পাসওয়ার্ড!');
+  }
+}
+
+function doMemberLogin() {
+  const username = $('memberLoginId').value.trim().toLowerCase();
+  const pass = $('memberLoginPass').value.trim();
+  if (!username || !pass) { showLoginError('আইডি এবং পাসওয়ার্ড দুটোই দিন!'); return; }
+  let foundIdx = -1;
+  data.members.forEach((m, i) => {
+    if (m.username && m.username.toLowerCase() === username && m.password && m.password === pass) {
+      foundIdx = i;
+    }
+  });
+  if (foundIdx >= 0) {
+    currentRole = 'member'; currentMemberIdx = foundIdx;
+    localStorage.setItem('akij_mass2_loggedin', 'true');
+    localStorage.setItem('akij_mass2_role', 'member');
+    localStorage.setItem('akij_mass2_member_idx', String(foundIdx));
+    $('loginScreen').classList.add('hidden');
+    $('mainApp').classList.remove('hidden');
+    applyRoleUI();
+    $('loginError').style.display = 'none';
+  } else {
+    showLoginError('ভুল সদস্য আইডি বা পাসওয়ার্ড!');
+  }
+}
+
+function checkLogin() {
+  const loggedIn = localStorage.getItem('akij_mass2_loggedin');
+  const role = localStorage.getItem('akij_mass2_role');
+  if (loggedIn === 'true') {
+    if (role === 'member') {
+      currentRole = 'member';
+      currentMemberIdx = parseInt(localStorage.getItem('akij_mass2_member_idx') || '0');
+    } else {
+      currentRole = 'admin';
+    }
+    $('loginScreen').classList.add('hidden');
+    $('mainApp').classList.remove('hidden');
+    applyRoleUI();
+  }
+}
+
+function doLogout() {
+  currentRole = null;
+  currentMemberIdx = null;
+  localStorage.removeItem('akij_mass2_loggedin');
+  localStorage.removeItem('akij_mass2_role');
+  localStorage.removeItem('akij_mass2_member_idx');
+  location.reload();
+}
+
+function resetLogin() {
+  localStorage.removeItem(ADMIN_CRED_KEY);
+  localStorage.removeItem('akij_mass2_loggedin');
+  localStorage.removeItem('akij_mass2_role');
+  localStorage.removeItem('akij_mass2_member_idx');
+  showLoginError('✅ ডিফল্টে রিসেট হয়েছে! আবার লগইন করুন (manager / manager)', '#38a169');
+}
+
+function applyRoleUI() {
+  const adminEls = document.querySelectorAll('.admin-only');
+  const memberEls = document.querySelectorAll('.member-view');
+  const tabs = document.querySelectorAll('.tab');
+  const logoutBar = $('logoutBar');
+
+  if (currentRole === 'admin') {
+    adminEls.forEach(el => el.classList.remove('hidden'));
+    memberEls.forEach(el => el.classList.add('hidden'));
+    tabs.forEach(t => t.style.display = '');
+    if (logoutBar) logoutBar.style.display = 'block';
+    const welcome = $('memberWelcome');
+    if (welcome) welcome.classList.add('hidden');
+  } else if (currentRole === 'member') {
+    adminEls.forEach(el => el.classList.add('hidden'));
+    memberEls.forEach(el => el.classList.remove('hidden'));
+    tabs[8].style.display = 'none';
+    tabs[0].style.display = 'none';
+    tabs[7].style.display = 'none';
+    tabs[6].style.display = 'none';
+    if (logoutBar) logoutBar.style.display = 'none';
+    showTab('report');
+    const welcome = $('memberWelcome');
+    if (welcome) {
+      welcome.classList.remove('hidden');
+      const wm = data.members[currentMemberIdx];
+      $('welcomeMemberName').textContent = wm ? wm.name : '-';
+    }
+  }
+}
+
+function changeCredentials() {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার আইডি/পাসওয়ার্ড পরিবর্তন করে পারবেন!'); return; }
+  const newId = $('newId').value.trim();
+  const newPass = $('newPass').value.trim();
+  const confirmPass = $('confirmPass').value.trim();
+  const msg = $('credMsg');
+  if (!newId || !newPass) { msg.textContent = 'আইডি এবং পাসওয়ার্ড দুটোই দিন!'; msg.style.color = '#e53e3e'; return; }
+  if (newPass !== confirmPass) { msg.textContent = 'পাসওয়ার্ড মিলছে না!'; msg.style.color = '#e53e3e'; return; }
+  saveAdminCred(newId, newPass);
+  msg.textContent = '✅ ম্যানেজার আইডি এবং পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!';
+  msg.style.color = '#38a169';
+  $('newId').value = ''; $('newPass').value = ''; $('confirmPass').value = '';
+  updateSettingsDisplay();
+}
+
+function updateSettingsDisplay() {
+  const cred = getAdminCred();
+  $('dispCurrentId').textContent = cred.id;
+}
+
+function populateSettingsMemberSelect() {
+  const sel = $('settingsMemberSelect');
+  if (!sel) return;
+  sel.innerHTML = '';
+  data.members.forEach((m, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.text = m.name + ' (' + (m.dept || 'কোনো বিভাগ নেই') + ')' + (m.username ? ' - ID: ' + m.username : ' - ID: নেই');
+    sel.appendChild(opt);
+  });
+}
+
+function changeMemberCredentialsFromSettings() {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার সদস্যের পাসওয়ার্ড পরিবর্তন করতে পারবেন!'); return; }
+  const idx = parseInt($('settingsMemberSelect').value);
+  const newId = $('settingsMemberNewId').value.trim();
+  const newPass = $('settingsMemberNewPass').value.trim();
+  const msg = $('memberCredMsg');
+  if (isNaN(idx) || idx < 0 || idx >= data.members.length) { msg.textContent = 'সদস্য বাছুন!'; msg.style.color = '#e53e3e'; return; }
+  if (!newId || !newPass) { msg.textContent = 'আইডি এবং পাসওয়ার্ড দুটোই দিন!'; msg.style.color = '#e53e3e'; return; }
+  data.members[idx].username = newId;
+  data.members[idx].password = newPass;
+  saveData(data);
+  renderMembers();
+  populateSettingsMemberSelect();
+  msg.textContent = '✅ "' + data.members[idx].name + '"-এর লগইন আইডি/পাসওয়ার্ড সেট হয়েছে!';
+  msg.style.color = '#38a169';
+  $('settingsMemberNewId').value = ''; $('settingsMemberNewPass').value = '';
+}
+
+$('adminLoginPass').addEventListener('keypress', e => { if (e.key === 'Enter') doAdminLogin(); });
+$('memberLoginPass').addEventListener('keypress', e => { if (e.key === 'Enter') doMemberLogin(); });
+
+// ========== DATA ==========
+function loadData() {
+  const raw = localStorage.getItem('akij_stuff_mass2_data_v2');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed.members) {
+        parsed.members.forEach(m => {
+          if (!m.hasOwnProperty('dept')) m.dept = '';
+          if (!m.hasOwnProperty('username')) m.username = '';
+          if (!m.hasOwnProperty('password')) m.password = '';
+        });
+      }
+      return parsed;
+    } catch(e) {}
+  }
+  return { members: [], meals: {}, bazar: {}, deposits: {}, settings: {} };
+}
+function saveData(data) {
+  localStorage.setItem('akij_stuff_mass2_data_v2', JSON.stringify(data));
+}
+let data = loadData();
+
+// ========== MONTH DROPDOWNS ==========
+function populateMonths() {
+  const months = new Set();
+  const today = todayMonth();
+  months.add(today);
+  Object.keys(data.meals).forEach(d => months.add(formatMonth(d)));
+  Object.keys(data.bazar).forEach(d => months.add(formatMonth(d)));
+  Object.keys(data.deposits).forEach(d => months.add(formatMonth(d)));
+  const sorted = Array.from(months).sort();
+  const ids = ['mealMonth','bazarMonth','depositMonth','reportMonth','hisabMonth'];
+  ids.forEach(id => {
+    const sel = $(id);
+    if (!sel) return;
+    sel.innerHTML = '';
+    sorted.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.text = getMonthName(m);
+      if (m === today) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  });
+  $('mealDate').value = todayStr();
+  $('bazarDate').value = todayStr();
+  $('depositDate').value = todayStr();
+}
+function getMonthName(ym) {
+  const [y,m] = ym.split('-');
+  const names = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+  return names[parseInt(m)-1] + ' ' + y;
+}
+
+// ========== MEMBERS ==========
+function renderMembers() {
+  const div = $('memberList');
+  if (!data.members.length) { div.innerHTML = '<p>কোনো সদস্য নেই।</p>'; return; }
+  let html = '<table><tr><th>নাম</th><th>বিভাগ</th><th>মোবাইল</th><th class="no-print">অ্যাকশন</th></tr>';
+  data.members.forEach((m, idx) => {
+    html += `<tr><td style="text-align:left;font-weight:600;">${m.name}</td><td><span class="dept-badge">${m.dept || '-'}</span></td><td>${m.phone || '-'}</td>
+      <td class="no-print"><button class="small danger" onclick="deleteMember(${idx})">মুছুন</button></td></tr>`;
+  });
+  html += '</table>';
+  div.innerHTML = html;
+
+  const loginDiv = $('memberLoginInfo');
+  if (loginDiv) {
+    let lhtml = '<table><tr><th>নাম</th><th>বিভাগ</th><th>মোবাইল</th><th>লগইন আইডি</th><th>পাসওয়ার্ড</th><th class="no-print">অ্যাকশন</th></tr>';
+    data.members.forEach((m, idx) => {
+      lhtml += `<tr><td style="text-align:left;font-weight:600;">${m.name}</td><td><span class="dept-badge">${m.dept || '-'}</span></td><td>${m.phone || '-'}</td>
+        <td>${m.username || '<span style="color:#a0aec0;">সেট করা হয়নি</span>'}</td>
+        <td>${m.password ? '********' : '<span style="color:#a0aec0;">সেট করা হয়নি</span>'}</td>
+        <td class="no-print"><button class="small secondary" onclick="editMemberLogin(${idx})">সম্পাদনা</button></td></tr>`;
+    });
+    lhtml += '</table>';
+    loginDiv.innerHTML = lhtml;
+  }
+  updatePersonSelects();
+}
+
+function editMemberLogin(idx) {
+  const m = data.members[idx];
+  const newUser = prompt(`"${m.name}"-এর নতুন লগইন আইডি সেট করুন:`, m.username || '');
+  if (newUser === null) return;
+  const newPass = prompt(`"${m.name}"-এর নতুন পাসওয়ার্ড সেট করুন:`, m.password || '');
+  if (newPass === null) return;
+  data.members[idx].username = newUser.trim();
+  data.members[idx].password = newPass.trim();
+  saveData(data);
+  renderMembers();
+  populateSettingsMemberSelect();
+  alert(`"${m.name}"-এর লগইন আইডি/াসওয়ার্ড সেট হয়েছে!`);
+}
+
+function addMember() {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার সদস্য যোগ করতে পারবেন!'); return; }
+  const name = $('memberName').value.trim();
+  const dept = $('memberDept').value.trim();
+  const phone = $('memberPhone').value.trim();
+  if (!name) return alert('নাম লিখুন!');
+  if (!dept) return alert('বিভাগ/ডিপার্টমেন্ট লিখুন!');
+  data.members.push({ name, dept, phone, username: '', password: '' });
+  saveData(data);
+  $('memberName').value = ''; $('memberDept').value = ''; $('memberPhone').value = '';
+  renderMembers();
+  populateSettingsMemberSelect();
+}
+function deleteMember(idx) {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার সদস্য মুছতে পারবেন!'); return; }
+  if (!confirm('মুছে ফেলবেন?')) return;
+  data.members.splice(idx, 1);
+  saveData(data);
+  renderMembers();
+  populateSettingsMemberSelect();
+}
+function updatePersonSelects() {
+  const opts = data.members.map((m, i) => `<option value="${i}">${m.name} (${m.dept || 'কোনো বিভাগ নেই'})</option>`).join('');
+  $('bazarPerson').innerHTML = opts;
+  $('depositPerson').innerHTML = opts;
+  renderMealInputs();
+}
+
+// ========== MEALS ==========
+function renderMealInputs() {
+  const div = $('mealInputs');
+  if (!data.members.length) { div.innerHTML = '<p>প্রথমে সদস্য যোগ করুন।</p>'; return; }
+  let html = '';
+  data.members.forEach((m, i) => {
+    html += `<div class="person-meal-row"><label class="name">${m.name} <span class="dept-badge">${m.dept || '-'}</span></label>
+      <div class="toggle-wrap"><span>খায়নি</span><label class="switch"><input type="checkbox" id="meal_${i}"><span class="slider"></span></label><span>খেয়েছে</span></div></div>`;
+  });
+  div.innerHTML = html;
+}
+function saveMeals() {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার মিল এন্ট্রি করতে পারবেন!'); return; }
+  const date = $('mealDate').value;
+  if (!date) return alert('তারিখ নির্বাচন করুন!');
+  const meals = {};
+  data.members.forEach((m, i) => { meals[i] = $(`meal_${i}`).checked ? 1 : 0; });
+  data.meals[date] = meals;
+  saveData(data);
+  populateMonths();
+  renderMealTable();
+  alert('মিল সেভ হয়েছে!');
+}
+function renderMealTable() {
+  const month = $('mealMonth').value;
+  const dates = Object.keys(data.meals).filter(d => formatMonth(d) === month).sort();
+  if (!dates.length) { $('mealTable').innerHTML = '<p>এই মাসে কোনো মিল এন্ট্রি নেই।</p>'; return; }
+  let html = '<div style="overflow-x:auto"><table><tr><th>তারিখ</th>';
+  data.members.forEach(m => html += `<th>${m.name} <span class="dept-badge">${m.dept || '-'}</span></th>`);
+  html += '<th class="no-print">অ্যাকশন</th></tr>';
+  dates.forEach(d => {
+    html += `<tr><td>${d}</td>`;
+    data.members.forEach((m, i) => {
+      const v = data.meals[d][i] || 0;
+      html += `<td class="${v == 1 ? 'ate-yes' : 'ate-no'}">${v == 1 ? '✓ ১' : '০'}</td>`;
+    });
+    html += `<td class="no-print"><button class="small danger" onclick="deleteMeal('${d}')">মুছুন</button></td></tr>`;
+  });
+  html += `<tr style="font-weight:700;background:#ebf8ff"><td>মোট মিল</td>`;
+  data.members.forEach((m, i) => {
+    let total = 0;
+    dates.forEach(d => total += (data.meals[d][i] || 0));
+    html += `<td>${total}</td>`;
+  });
+  html += '<td class="no-print"></td></tr></table></div>';
+  $('mealTable').innerHTML = html;
+}
+function deleteMeal(date) {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার মিল মুছতে পারবেন!'); return; }
+  if (!confirm(date + ' তারিখের মিল মুছবেন?')) return;
+  delete data.meals[date];
+  saveData(data);
+  renderMealTable();
+}
+
+// ========== BAZAR ==========
+function addBazar() {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার বাজার যোগ করতে পারবেন!'); return; }
+  const date = $('bazarDate').value;
+  const personIdx = $('bazarPerson').value;
+  const desc = $('bazarDesc').value.trim();
+  const amount = parseFloat($('bazarAmount').value);
+  if (!date || !desc || isNaN(amount) || amount <= 0) return alert('সব তথ্য সঠিকভাবে পূরণ করুন!');
+  if (!data.bazar[date]) data.bazar[date] = [];
+  data.bazar[date].push({ personIdx: parseInt(personIdx), desc, amount });
+  saveData(data);
+  populateMonths();
+  renderBazarTable();
+  $('bazarDesc').value = ''; $('bazarAmount').value = '';
+}
+function renderBazarTable() {
+  const month = $('bazarMonth').value;
+  const dates = Object.keys(data.bazar).filter(d => formatMonth(d) === month).sort();
+  if (!dates.length) { $('bazarTable').innerHTML = '<p>এই মাসে কোনো বাজার নেই।</p>'; return; }
+  let html = '<table><tr><th>তারিখ</th><th>বাজারকারী</th><th>বিভাগ</th><th>বিবরণ</th><th>টাকা</th><th class="no-print">অ্যাকশন</th></tr>';
+  let total = 0;
+  dates.forEach(d => {
+    data.bazar[d].forEach((b, idx) => {
+      const m = data.members[b.personIdx];
+      html += `<tr><td>${d}</td><td>${m ? m.name : 'অজানা'}</td><td><span class="dept-badge">${(m && m.dept) || '-'}</span></td><td>${b.desc}</td><td>${b.amount}</td>
+        <td class="no-print"><button class="small danger" onclick="deleteBazar('${d}',${idx})">মুছুন</button></td></tr>`;
+      total += b.amount;
+    });
+  });
+  html += `<tr style="font-weight:700;background:#ebf8ff"><td colspan="4">মোট বাজার</td><td>${total}</td><td class="no-print"></td></tr></table>`;
+  $('bazarTable').innerHTML = html;
+}
+function deleteBazar(date, idx) {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার বাজার মুছতে পারবেন!'); return; }
+  if (!confirm('মুছবেন?')) return;
+  data.bazar[date].splice(idx, 1);
+  if (!data.bazar[date].length) delete data.bazar[date];
+  saveData(data);
+  renderBazarTable();
+}
+
+// ========== DEPOSIT ==========
+function addDeposit() {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার জমা যোগ করতে পারবেন!'); return; }
+  const date = $('depositDate').value;
+  const personIdx = $('depositPerson').value;
+  const amount = parseFloat($('depositAmount').value);
+  if (!date || isNaN(amount) || amount <= 0) return alert('সঠিক তথ্য দিন!');
+  if (!data.deposits[date]) data.deposits[date] = [];
+  data.deposits[date].push({ personIdx: parseInt(personIdx), amount });
+  saveData(data);
+  populateMonths();
+  renderDepositTable();
+  $('depositAmount').value = '';
+}
+function renderDepositTable() {
+  const month = $('depositMonth').value;
+  const dates = Object.keys(data.deposits).filter(d => formatMonth(d) === month).sort();
+  if (!dates.length) { $('depositTable').innerHTML = '<p>এই মাসে কোনো জমা নেই।</p>'; return; }
+  let html = '<table><tr><th>তারিখ</th><th>সদস্য</th><th>বিভাগ</th><th>টাকা</th><th class="no-print">অ্যাকশন</th></tr>';
+  let total = 0;
+  dates.forEach(d => {
+    data.deposits[d].forEach((dep, idx) => {
+      const m = data.members[dep.personIdx];
+      html += `<tr><td>${d}</td><td>${m ? m.name : 'অজানা'}</td><td><span class="dept-badge">${(m && m.dept) || '-'}</span></td><td>${dep.amount}</td>
+        <td class="no-print"><button class="small danger" onclick="deleteDeposit('${d}',${idx})">মুছুন</button></td></tr>`;
+      total += dep.amount;
+    });
+  });
+  html += `<tr style="font-weight:700;background:#ebf8ff"><td colspan="3">মোট জমা</td><td>${total}</td><td class="no-print"></td></tr></table>`;
+  $('depositTable').innerHTML = html;
+}
+function deleteDeposit(date, idx) {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার জমা মুছতে পারবেন!'); return; }
+  if (!confirm('মুছবেন?')) return;
+  data.deposits[date].splice(idx, 1);
+  if (!data.deposits[date].length) delete data.deposits[date];
+  saveData(data);
+  renderDepositTable();
+}
+
+// ========== CALCULATION ==========
+function calcRange(startDate, endDate) {
+  const allDates = Object.keys(data.meals).filter(d => d >= startDate && d <= endDate).sort();
+  const allBazarDates = Object.keys(data.bazar).filter(d => d >= startDate && d <= endDate).sort();
+  const allDepositDates = Object.keys(data.deposits).filter(d => d >= startDate && d <= endDate).sort();
+
+  let totalMeals = 0;
+  const personMeals = data.members.map(() => 0);
+  allDates.forEach(d => {
+    data.members.forEach((m, i) => {
+      const v = data.meals[d][i] || 0;
+      personMeals[i] += v;
+      totalMeals += v;
+    });
+  });
+
+  let totalBazar = 0;
+  const bazarDetails = [];
+  allBazarDates.forEach(d => {
+    data.bazar[d].forEach(b => {
+      totalBazar += b.amount;
+      const m = data.members[b.personIdx];
+      bazarDetails.push({ date: d, person: m ? m.name : 'অজানা', dept: (m && m.dept) || '-', desc: b.desc, amount: b.amount });
+    });
+  });
+
+  const personDeposits = data.members.map(() => 0);
+  allDepositDates.forEach(d => {
+    data.deposits[d].forEach(dep => personDeposits[dep.personIdx] += dep.amount);
+  });
+
+  const mealRate = totalMeals > 0 ? totalBazar / totalMeals : 0;
+  const personCost = personMeals.map(m => m * mealRate);
+  const personBalance = personCost.map((c, i) => personDeposits[i] - c);
+
+  return { totalMeals, totalBazar, mealRate, personMeals, personDeposits, personCost, personBalance, bazarDetails };
+}
+
+// ========== REPORT ==========
+function renderReport() {
+  const month = $('reportMonth').value;
+  const r = calcRange(month + '-01', month + '-31');
+
+  $('reportSummary').innerHTML = `
+    <div class="summary-box">
+      <div class="summary-item"><h3>মোট বাজার</h3><p>${r.totalBazar.toFixed(2)} টাকা</p></div>
+      <div class="summary-item"><h3>মোট মিল</h3><p>${r.totalMeals.toFixed(0)}</p></div>
+      <div class="summary-item"><h3>মিল রেট</h3><p>${r.mealRate.toFixed(2)} টাকা</p></div>
+    </div>
+  `;
+
+  let html = '<table><tr><th>সদস্য</th><th>বিভাগ</th><th>জমা টাকা</th><th>মোট মিল</th><th>মিল রেট</th><th>মোট টাকা</th><th>মেস পাবে</th><th>টাকা দিবে</th></tr>';
+  data.members.forEach((m, i) => {
+    const bal = r.personBalance[i];
+    const gets = bal > 0 ? bal.toFixed(2) : '-';
+    const pays = bal < 0 ? Math.abs(bal).toFixed(2) : '-';
+    const rowStyle = (currentRole === 'member' && currentMemberIdx === i) ? 'style="background:#f0fff4;font-weight:700;"' : '';
+    html += `<tr ${rowStyle}><td style="text-align:left;font-weight:600;">${m.name}</td><td><span class="dept-badge">${m.dept || '-'}</span></td>
+      <td>${r.personDeposits[i].toFixed(2)}</td><td>${r.personMeals[i].toFixed(0)}</td><td>${r.mealRate.toFixed(2)}</td><td>${r.personCost[i].toFixed(2)}</td>
+      <td class="${bal > 0 ? 'advance' : 'neutral'}">${gets}</td><td class="${bal < 0 ? 'due' : 'neutral'}">${pays}</td></tr>`;
+  });
+  html += '</table>';
+  $('reportDetails').innerHTML = html;
+}
+
+// ========== HISAB (Department Report) ==========
+function getDepartments() {
+  const depts = new Set();
+  data.members.forEach(m => { if (m.dept) depts.add(m.dept.trim()); });
+  return Array.from(depts).sort();
+}
+
+function renderHisab() {
+  const month = $('hisabMonth').value;
+  const r = calcRange(month + '-01', month + '-31');
+  const depts = getDepartments();
+  if (!depts.length) {
+    $('hisabSummary').innerHTML = '<p>কোনো বিভাগ পাওয়া যায়নি। সদস্য যোগ করার সময় বিভাগ/ডিপার্টমেন্ট দিন।</p>';
+    $('hisabDetails').innerHTML = '';
+    return;
+  }
+
+  let summaryHtml = '<div class="summary-box">';
+  let grandTotalMeals = 0, grandTotalDeposits = 0, grandTotalCost = 0;
+
+  depts.forEach(dept => {
+    let deptMeals = 0, deptDeposits = 0, deptCost = 0;
+    data.members.forEach((m, i) => {
+      if (m.dept && m.dept.trim() === dept) {
+        deptMeals += r.personMeals[i];
+        deptDeposits += r.personDeposits[i];
+        deptCost += r.personCost[i];
+      }
+    });
+    grandTotalMeals += deptMeals;
+    grandTotalDeposits += deptDeposits;
+    grandTotalCost += deptCost;
+    const deptBal = deptDeposits - deptCost;
+    summaryHtml += `<div class="summary-item"><h3>${dept}</h3><p>${deptMeals.toFixed(0)} মিল</p>
+      <p style="font-size:0.9rem;color:#4a5568;">জমা: ${deptDeposits.toFixed(0)} টাকা</p>
+      <p style="font-size:0.9rem;color:#4a5568;">খরচ: ${deptCost.toFixed(2)} টাকা</p>
+      <p style="font-size:1rem;" class="${deptBal >= 0 ? 'advance' : 'due'}">${deptBal >= 0 ? '+' : ''}${deptBal.toFixed(2)}</p></div>`;
+  });
+
+  const grandBal = grandTotalDeposits - grandTotalCost;
+  summaryHtml += `<div class="summary-item" style="border-left-color:#38a169;background:#f0fff4;"><h3>সর্বমোট</h3><p>${grandTotalMeals.toFixed(0)} মিল</p>
+    <p style="font-size:0.9rem;color:#4a5568;">জমা: ${grandTotalDeposits.toFixed(0)} টাকা</p>
+    <p style="font-size:0.9rem;color:#4a5568;">খরচ: ${grandTotalCost.toFixed(2)} টাকা</p>
+    <p style="font-size:1rem;" class="${grandBal >= 0 ? 'advance' : 'due'}">${grandBal >= 0 ? '+' : ''}${grandBal.toFixed(2)}</p></div>`;
+  summaryHtml += '</div>';
+  $('hisabSummary').innerHTML = summaryHtml;
+
+  let detailsHtml = '';
+  depts.forEach(dept => {
+    detailsHtml += `<div class="dept-section"><div class="dept-header">🏢 ${dept}</div><div class="dept-body">`;
+    let deptMeals = 0, deptDeposits = 0, deptCost = 0;
+    let rowsHtml = '';
+    data.members.forEach((m, i) => {
+      if (m.dept && m.dept.trim() === dept) {
+        deptMeals += r.personMeals[i];
+        deptDeposits += r.personDeposits[i];
+        deptCost += r.personCost[i];
+        const bal = r.personBalance[i];
+        const gets = bal > 0 ? bal.toFixed(2) : '-';
+        const pays = bal < 0 ? Math.abs(bal).toFixed(2) : '-';
+        const rowStyle = (currentRole === 'member' && currentMemberIdx === i) ? 'style="background:#f0fff4;font-weight:700;"' : '';
+        rowsHtml += `<tr ${rowStyle}><td style="text-align:left;font-weight:600;">${m.name}</td><td>${m.phone || '-'}</td>
+          <td>${r.personDeposits[i].toFixed(2)}</td><td>${r.personMeals[i].toFixed(0)}</td><td>${r.mealRate.toFixed(2)}</td><td>${r.personCost[i].toFixed(2)}</td>
+          <td class="${bal > 0 ? 'advance' : 'neutral'}">${gets}</td><td class="${bal < 0 ? 'due' : 'neutral'}">${pays}</td></tr>`;
+      }
+    });
+    const deptBal = deptDeposits - deptCost;
+    detailsHtml += `<div class="dept-summary">
+      <div class="dept-summary-item"><h4>মোট মিল</h4><p>${deptMeals.toFixed(0)}</p></div>
+      <div class="dept-summary-item"><h4>মোট জমা</h4><p>${deptDeposits.toFixed(2)}</p></div>
+      <div class="dept-summary-item"><h4>মোট খরচ</h4><p>${deptCost.toFixed(2)}</p></div>
+      <div class="dept-summary-item"><h4>বাকি/জমা</h4><p class="${deptBal >= 0 ? 'advance' : 'due'}">${deptBal >= 0 ? '+' : ''}${deptBal.toFixed(2)}</p></div></div>`;
+    detailsHtml += `<div style="overflow-x:auto"><table><tr><th>সদস্য</th><th>মোবাইল</th><th>জমা টাকা</th><th>মোট মিল</th><th>মিল রেট</th><th>মোট টাকা</th><th>মেস পাবে</th><th>টাকা দিবে</th></tr>${rowsHtml}</table></div></div></div>`;
+  });
+  $('hisabDetails').innerHTML = detailsHtml;
+}
+
+// ========== MONTH END REPORT ==========
+function generateMonthEnd() {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার মাস শেষের রিপোর্ট তৈরি করতে পারবেন!'); return; }
+  const monthName = $('meMonthName').value.trim() || 'নভেম্বর';
+  const manager = $('meManager').value.trim() || '-';
+  const startDate = $('meStartDate').value;
+  const endDate = $('meEndDate').value;
+  if (!startDate || !endDate) return alert('শুরুর এবং শেষ তারিখ দুটোই দিন!');
+  const r = calcRange(startDate, endDate);
+  data.settings.lastMonthEnd = { monthName, manager, startDate, endDate };
+  saveData(data);
+
+  let bazarRows = ''; let bazarSl = 1;
+  r.bazarDetails.forEach(b => {
+    bazarRows += `<tr><td>${bazarSl++}</td><td>${b.date}</td><td>${b.person}</td><td><span class="dept-badge">${b.dept}</span></td><td>${b.desc}</td><td>${b.amount.toFixed(2)}</td></tr>`;
+  });
+
+  let memberRows = '';
+  data.members.forEach((m, i) => {
+    const bal = r.personBalance[i];
+    const gets = bal > 0 ? bal.toFixed(2) : '-';
+    const pays = bal < 0 ? Math.abs(bal).toFixed(2) : '-';
+    memberRows += `<tr><td style="text-align:left;font-weight:600;">${m.name}</td><td><span class="dept-badge">${m.dept || '-'}</span></td><td>${m.phone || '-'}</td>
+      <td>${r.personDeposits[i].toFixed(2)}</td><td>${r.personMeals[i].toFixed(0)}</td><td>${r.mealRate.toFixed(2)}</td><td>${r.personCost[i].toFixed(2)}</td>
+      <td class="${bal > 0 ? 'advance' : 'neutral'}">${gets}</td><td class="${bal < 0 ? 'due' : 'neutral'}">${pays}</td></tr>`;
+  });
+
+  const depts = getDepartments();
+  let deptRows = '';
+  depts.forEach(dept => {
+    let deptMeals = 0, deptDeposits = 0, deptCost = 0;
+    data.members.forEach((m, i) => {
+      if (m.dept && m.dept.trim() === dept) { deptMeals += r.personMeals[i]; deptDeposits += r.personDeposits[i]; deptCost += r.personCost[i]; }
+    });
+    const deptBal = deptDeposits - deptCost;
+    deptRows += `<tr><td style="text-align:left;font-weight:600;">${dept}</td><td>${deptMeals.toFixed(0)}</td><td>${deptDeposits.toFixed(2)}</td><td>${deptCost.toFixed(2)}</td><td class="${deptBal >= 0 ? 'advance' : 'due'}">${deptBal >= 0 ? '+' : ''}${deptBal.toFixed(2)}</td></tr>`;
+  });
+
+  const reportHTML = `
+    <div class="card"><div class="report-header"><h2>📊 ${monthName} মাসের হিসাব</h2><p>📅 ${startDate} থেকে ${endDate}</p><p>👤 ম্যানেজার: ${manager}</p></div>
+      <div class="report-meta"><div class="meta-item"><label>মোট বাজার</label><div>${r.totalBazar.toFixed(2)} টাকা</div></div>
+        <div class="meta-item"><label>মোট মিল</label><div>${r.totalMeals.toFixed(0)}</div></div>
+        <div class="meta-item"><label>মিল রেট</label><div>${r.mealRate.toFixed(2)} টাকা</div></div>
+        <div class="meta-item"><label>সদস্য সংখ্যা</label><div>${data.members.length} জন</div></div></div></div>
+    <div class="card"><h3>বিভাগ অনুযায়ী সারাংশ</h3><div style="overflow-x:auto"><table><tr><th>বিভাগ</th><th>মোট মিল</th><th>মোট জমা</th><th>মোট খরচ</th><th>বাকি/জমা</th></tr>${deptRows || '<tr><td colspan="5">কোনো বিভাগ নেই</td></tr>'}</table></div></div>
+    <div class="card"><h3>সদস্যদের হিসাব</h3><div style="overflow-x:auto"><table><tr><th>নাম</th><th>বিভা</th><th>মোবাইল</th><th>জমা টাকা</th><th>মোট মিল</th><th>মিল রেট</th><th>মোট টাকা</th><th>মেস পাবে</th><th>টাকা দিবে</th></tr>${memberRows}</table></div></div>
+    <div class="card bazar-list"><h3>🛒 বাজারের বিবরণ</h3><div style="overflow-x:auto"><table><tr><th>ক্রম</th><th>তারিখ</th><th>বাজারকারী</th><th>বিভাগ</th><th>বিবরণ</th><th>টাকা</th></tr>${bazarRows || '<tr><td colspan="6">কোনো বাজার নেই</td></tr>'}</table></div></div>
+    <div class="card total-footer"><h3>💰 এই মাসে মোট খরচ</h3><p>${r.totalBazar.toFixed(2)} টাকা</p></div>
+    <div class="card no-print" style="text-align:center;"><button class="action" onclick="window.print()">🖨️ রিপোর্ট প্রিন্ট করুন</button></div>
+  `;
+  $('monthEndReport').innerHTML = reportHTML;
+}
+
+// ========== ALL MONTHS ==========
+function renderAllMonths() {
+  const months = new Set();
+  Object.keys(data.meals).forEach(d => months.add(formatMonth(d)));
+  Object.keys(data.bazar).forEach(d => months.add(formatMonth(d)));
+  Object.keys(data.deposits).forEach(d => months.add(formatMonth(d)));
+  const sorted = Array.from(months).sort();
+  if (!sorted.length) { $('allMonthsSummary').innerHTML = '<p>কোনো ডাটা নেই।</p>'; $('allMonthsDetails').innerHTML = ''; return; }
+
+  let sumHtml = '<table><tr><th>মাস</th><th>মোট বাজার</th><th>মোট মিল</th><th>মিল রেট</th></tr>';
+  sorted.forEach(m => {
+    const r = calcRange(m + '-01', m + '-31');
+    sumHtml += `<tr><td>${getMonthName(m)}</td><td>${r.totalBazar.toFixed(2)}</td><td>${r.totalMeals.toFixed(0)}</td><td>${r.mealRate.toFixed(2)}</td></tr>`;
+  });
+  sumHtml += '</table>';
+  $('allMonthsSummary').innerHTML = sumHtml;
+
+  let detHtml = '';
+  sorted.forEach(m => {
+    const r = calcRange(m + '-01', m + '-31');
+    detHtml += `<h3>${getMonthName(m)}</h3><table><tr><th>সদস্য</th><th>বিভাগ</th><th>মোট মিল</th><th>জমা</th><th>খরচ</th><th>বাকি/জমা</th></tr>`;
+    data.members.forEach((mem, i) => {
+      const bal = r.personBalance[i];
+      const rowStyle = (currentRole === 'member' && currentMemberIdx === i) ? 'style="background:#f0fff4;font-weight:700;"' : '';
+      detHtml += `<tr ${rowStyle}><td style="text-align:left;font-weight:600;">${mem.name}</td><td><span class="dept-badge">${mem.dept || '-'}</span></td><td>${r.personMeals[i].toFixed(0)}</td><td>${r.personDeposits[i].toFixed(2)}</td><td>${r.personCost[i].toFixed(2)}</td><td class="${bal >= 0 ? 'advance' : 'due'}">${bal >= 0 ? '+' : ''}${bal.toFixed(2)}</td></tr>`;
+    });
+    detHtml += '</table><br>';
+  });
+  $('allMonthsDetails').innerHTML = detHtml;
+}
+
+// ========== BACKUP / RESTORE ==========
+function exportData() {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার ব্যাকআপ করতে পারবেন!'); return; }
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'akij_stuff_mass2_backup_' + todayStr() + '.json'; a.click();
+}
+function importData(input) {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার ডাটা রিস্টোর করতে পারবেন!'); return; }
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported.members || !imported.meals) throw new Error('Invalid');
+      data = imported; saveData(data); location.reload();
+    } catch(err) { alert('ফাইলটি সঠিক নয়!'); }
+  };
+  reader.readAsText(file);
+}
+function clearAll() {
+  if (currentRole !== 'admin') { alert('শুধু ম্যানেজার ডাটা মুছতে পারবেন!'); return; }
+  if (!confirm('সমস্ত ডাটা মুছে ফেলবেন? এটি ফিরিয়ে আনা যাবে না!')) return;
+  localStorage.removeItem('akij_stuff_mass2_data_v2');
+  location.reload();
+}
+
+// ========== TABS ==========
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  $(name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'report') renderReport();
+  if (name === 'hisab') renderHisab();
+  if (name === 'history') renderAllMonths();
+  if (name === 'meals') renderMealTable();
+  if (name === 'bazar') renderBazarTable();
+  if (name === 'deposit') renderDepositTable();
+  if (name === 'settings') { updateSettingsDisplay(); populateSettingsMemberSelect(); }
+}
+
+// ========== INIT ==========
+$('mealMonth').addEventListener('change', renderMealTable);
+$('bazarMonth').addEventListener('change', renderBazarTable);
+$('depositMonth').addEventListener('change', renderDepositTable);
+
+if (data.settings && data.settings.lastMonthEnd) {
+  $('meMonthName').value = data.settings.lastMonthEnd.monthName || '';
+  $('meManager').value = data.settings.lastMonthEnd.manager || '';
+  $('meStartDate').value = data.settings.lastMonthEnd.startDate || '';
+  $('meEndDate').value = data.settings.lastMonthEnd.endDate || '';
+}
+
+checkLogin();
+populateMonths();
+renderMembers();
+renderMealInputs();
+renderMealTable();
+renderBazarTable();
+renderDepositTable();
+renderReport();
+renderHisab();
+renderAllMonths();
+updateSettingsDisplay();
+populateSettingsMemberSelect();
+</script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2b6cb0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Akij Stuff mass 2</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: #f0f4f8; color: #1a202c; }
+  .container { max-width: 900px; margin: 0 auto; padding: 15px; }
+  h1 { text-align: center; background: #2b6cb0; color: white; margin: -15px -15px 15px -15px; padding: 18px; font-size: 1.3rem; }
+  .card { background: white; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+  .tabs { display: flex; gap: 6px; margin-bottom: 15px; flex-wrap: wrap; }
+  .tab { flex: 1; min-width: 70px; padding: 10px 4px; border: none; background: #cbd5e0; color: #2d3748; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; font-size: 0.82rem; }
+  .tab.active { background: #2b6cb0; color: white; }
+  .section { display: none; }
+  .section.active { display: block; }
+  label { display: block; margin: 10px 0 5px; font-weight: 600; font-size: 0.95rem; }
+  input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 1rem; }
+  button.action { margin-top: 12px; width: 100%; padding: 12px; background: #38a169; color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  button.action:hover { background: #2f855a; }
+  button.danger { background: #e53e3e; }
+  button.danger:hover { background: #c53030; }
+  button.small { padding: 6px 10px; font-size: 0.85rem; width: auto; margin-top: 0; }
+  button.secondary { background: #4299e1; }
+  button.secondary:hover { background: #3182ce; }
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.92rem; }
+  th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: center; }
+  th { background: #edf2f7; font-weight: 700; }
+  tr:nth-child(even) { background: #f7fafc; }
+  .summary-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px; }
+  .summary-item { background: #ebf8ff; padding: 12px; border-radius: 8px; text-align: center; border-left: 4px solid #2b6cb0; }
+  .summary-item h3 { margin: 0 0 5px 0; font-size: 0.9rem; color: #4a5568; }
+  .summary-item p { margin: 0; font-size: 1.2rem; font-weight: 700; color: #2b6cb0; }
+  .due { color: #e53e3e; font-weight: 700; }
+  .advance { color: #38a169; font-weight: 700; }
+  .neutral { color: #4a5568; }
+  .month-selector { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; }
+  .month-selector select, .month-selector input { flex: 1; }
+  .hidden { display: none !important; }
+  .person-meal-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; padding: 10px; background: #f7fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
+  .person-meal-row label.name { flex: 2; margin: 0; font-weight: 600; font-size: 1rem; }
+  .toggle-wrap { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .toggle-wrap span { font-size: 0.85rem; color: #718096; }
+  .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 26px; }
+  .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+  .switch input:checked + .slider { background-color: #38a169; }
+  .switch input:checked + .slider:before { transform: translateX(24px); }
+  .ate-yes { color: #38a169; font-weight: 700; }
+  .ate-no { color: #a0aec0; }
+  #loginScreen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; overflow-y: auto; padding: 20px 0; }
+  .login-box { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); margin: auto; }
+  .login-box h2 { text-align: center; color: #2b6cb0; margin-bottom: 20px; }
+  .login-box .logo { text-align: center; font-size: 3rem; margin-bottom: 10px; }
+  .login-error { color: #e53e3e; text-align: center; font-size: 0.9rem; margin-top: 10px; display: none; }
+  .login-info { background: #ebf8ff; padding: 10px; border-radius: 6px; text-align: center; margin-bottom: 15px; font-size: 0.85rem; color: #2b6cb0; }
+  .login-type-tabs { display: flex; gap: 6px; margin-bottom: 15px; }
+  .login-type-tab { flex: 1; padding: 10px; border: none; background: #e2e8f0; color: #4a5568; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; }
+  .login-type-tab.active { background: #2b6cb0; color: white; }
+  .report-header { text-align: center; padding: 20px; background: #2b6cb0; color: white; border-radius: 10px; margin-bottom: 15px; }
+  .report-header h2 { margin: 0 0 8px 0; font-size: 1.4rem; }
+  .report-header p { margin: 4px 0; font-size: 0.95rem; }
+  .report-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+  .report-meta .meta-item { background: #ebf8ff; padding: 10px; border-radius: 8px; text-align: center; }
+  .report-meta .meta-item label { margin: 0 0 4px 0; font-size: 0.8rem; color: #4a5568; }
+  .report-meta .meta-item div { font-weight: 700; color: #2b6cb0; }
+  .total-footer { background: #2b6cb0; color: white; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; }
+  .total-footer h3 { margin: 0; font-size: 1.1rem; }
+  .total-footer p { margin: 5px 0 0 0; font-size: 1.3rem; font-weight: 700; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .info-box { background: #f0fff4; border: 1px solid #9ae6b4; padding: 12px; border-radius: 8px; margin-bottom: 15px; color: #22543d; }
+  .current-cred { background: #ebf8ff; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #2b6cb0; }
+  .current-cred p { margin: 4px 0; font-size: 0.95rem; }
+  .member-welcome { background: #f0fff4; border: 1px solid #9ae6b4; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; position: relative; }
+  .member-welcome h2 { margin: 0 0 5px 0; color: #22543d; }
+  .member-welcome p { margin: 0; color: #38a169; font-weight: 600; }
+  .read-only-badge { display: inline-block; background: #ebf8ff; color: #2b6cb0; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-bottom: 10px; }
+  .dept-badge { display: inline-block; background: #bee3f8; color: #2b6cb0; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; margin-left: 5px; }
+  .dept-section { margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+  .dept-header { background: #2b6cb0; color: white; padding: 12px 15px; font-weight: 700; font-size: 1rem; }
+  .dept-body { padding: 10px; background: #f7fafc; }
+  .dept-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 10px; }
+  .dept-summary-item { background: white; padding: 10px; border-radius: 8px; text-align: center; border-left: 3px solid #2b6cb0; }
+  .dept-summary-item h4 { margin: 0 0 4px 0; font-size: 0.75rem; color: #718096; }
+  .dept-summary-item p { margin: 0; font-size: 1rem; font-weight: 700; color: #2b6cb0; }
+  .settings-box { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+  .settings-box h3 { margin: 0 0 12px 0; color: #2d3748; font-size: 1.05rem; }
+  .version-text { text-align: center; font-size: 0.75rem; color: #a0aec0; margin-top: 15px; }
+  .logout-bar { text-align: right; margin-bottom: 10px; }
+  .logout-bar button { background: #e53e3e; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: 600; }
+  .logout-bar button:hover { background: #c53030; }
+  @media print { .tabs, button, .no-print, #loginScreen, .logout-bar { display: none !important; } .section { display: block !important; } body { background: white; } .card { box-shadow: none; border: 1px solid #e2e8f0; } }
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="logo">🍽</div>
+    <h2>Akij Stuff mass 2</h2>
+    <div class="login-info">মেস সদস্য এবং ম্যানেজার উভয়েই লগইন করতে পারবেন</div>
+    <div class="login-type-tabs">
+      <button class="login-type-tab active" onclick="setLoginType('admin')">👤 ম্যানেজার</button>
+      <button class="login-type-tab" onclick="setLoginType('member')">🙋 সদস্য</button>
+    </div>
+    <div id="adminLoginForm">
+      <label>ম্যানেজার আইডি</label>
+      <input type="text" id="adminLoginId" placeholder="আইডি লিখুন">
+      <label>পাসওয়ার্ড</label>
+      <input type="password" id="adminLoginPass" placeholder="পাসওয়ার্ড লিখুন">
+      <button class="action" onclick="doAdminLogin()" style="margin-top:15px;">ম্যানেজার হিসেবে প্রবেশ</button>
+    </div>
+    <div id="memberLoginForm" class="hidden">
+      <label>সদস্য আইডি</label>
+      <input type="text" id="memberLoginId" placeholder="সদস্য আইডি">
+      <label>পাসওয়ার্ড</label>
+      <input type="password" id="memberLoginPass" placeholder="পাসওয়ার্ড">
+      <button class="action" onclick="doMemberLogin()" style="margin-top:15px;">সদস্য হিসেবে প্রবেশ</button>
+    </div>
+    <p class="login-error" id="loginError"></p>
+    <div style="text-align:center;margin-top:12px;">
+      <button onclick="resetLogin()" style="background:none;border:none;color:#e53e3e;text-decoration:underline;cursor:pointer;font-size:0.85rem;">🔄 ডিফল্টে রিসেট করুন</button>
+    </div>
+    <p class="version-text">v4.5 | ডিফল্ট: manager / manager (নিজে লিখুন)</p>
+  </div>
+</div>
+
+<div id="mainApp" class="hidden">
+<div class="container">
+  <div class="logout-bar no-print" id="logoutBar">
+    <button onclick="doLogout()">🔒 লগআউট</button>
+  </div>
+
+  <h1>🍽️ Akij Stuff mass 2</h1>
+
+  <div id="memberWelcome" class="member-welcome hidden">
+    <h2>🙋 স্বাগতম, <span id="welcomeMemberName">-</span>!</h2>
+    <p>আপনি সদস্য হিসেবে লগইন করেছেন (শুধু দেখার অনুমতি)</p>
+    <button class="action no-print" onclick="doLogout()" style="margin-top:10px;background:#e53e3e;width:auto;padding:8px 20px;font-size:0.9rem;">🔒 লগআউট</button>
+  </div>
+
+  <div class="tabs no-print" id="mainTabs">
+    <button class="tab active" onclick="showTab('members')">সদস্য</button>
+    <button class="tab" onclick="showTab('meals')">মিল</button>
+    <button class="tab" onclick="showTab('bazar')">বাজার</button>
+    <button class="tab" onclick="showTab('deposit')">জমা</button>
+    <button class="tab" onclick="showTab('report')">হিসাব</button>
+    <button class="tab" onclick="showTab('hisab')">বিভাগ হিসাব</button>
+    <button class="tab" onclick="showTab('monthend')">মাস শেষ</button>
+    <button class="tab" onclick="showTab('history')">সব মাস</button>
+    <button class="tab" onclick="showTab('settings')">⚙️</button>
+  </div>
+
+  <div id="members" class="section active">
+    <div class="card admin-only">
+      <h2>সদস্য যোগ করুন</h2>
+      <label>নাম *</label>
+      <input type="text" id="memberName" placeholder="যেমন: রাহুল">
+      <label>বিভাগ/ডপার্টমেন্ট *</label>
+      <input type="text" id="memberDept" placeholder="যেমন: প্রোডাকশন, HR, অ্যাকাউন্টস">
+      <label>মোবাইল নম্বর</label>
+      <input type="text" id="memberPhone" placeholder="01XXXXXXXXX">
+      <div class="info-box">সদস্যের লগইন আইডি ও পাসওয়ার্ড আপনি পরে "সদস্য লগইন তথ্য" থেকে নিজে সেট করতে পারবেন।</div>
+      <button class="action" onclick="addMember()">সদস্য যোগ করুন</button>
+    </div>
+    <div class="card">
+      <h2>সদস্য তালিকা</h2>
+      <div id="memberList"></div>
+    </div>
+    <div class="card admin-only">
+      <h2>🔐 সদস্য লগইন থ্য (আইডি/পাসওয়ার্ড সেট করুন)</h2>
+      <div class="info-box">নিচের তালিকা থেকে "সম্পাদনা" বাটন চেপে প্রতিটি সদস্যের জন্য লগইন আইডি ও পাসওয়ার্ড সেট করুন। আইডি/পাসওয়ার্ড সেট করা সদস্যরা নিজে লগইন করে হিসাব দেখতে পারবে।</div>
+      <div id="memberLoginInfo"></div>
+    </div>
+  </div>
+
+  <div id="meals" class="section">
+    <div class="card admin-only">
+      <h2>দৈনিক মিল এন্ট্রি (খেয়েছে = ১, খায়নি = ০)</h2>
+      <div class="month-selector">
+        <select id="mealMonth"></select>
+        <input type="date" id="mealDate">
+      </div>
+      <div id="mealInputs"></div>
+      <button class="action" onclick="saveMeals()">মিল সেভ করুন</button>
+    </div>
+    <div class="card member-view">
+      <span class="read-only-badge">📖 শুধু দেখার জন্য</span>
+      <h2>এই মাসে মিল তালিকা</h2>
+      <div id="mealTable"></div>
+    </div>
+  </div>
+
+  <div id="bazar" class="section">
+    <div class="card admin-only">
+      <h2>বাজার খরচ এন্ট্রি</h2>
+      <label>তারিখ</label>
+      <input type="date" id="bazarDate">
+      <label>বাজারকারী</label>
+      <select id="bazarPerson"></select>
+      <label>বিবরণ</label>
+      <input type="text" id="bazarDesc" placeholder="যেমন: চাল, ডাল, সজি">
+      <label>টাকা</label>
+      <input type="number" id="bazarAmount" placeholder="0">
+      <button class="action" onclick="addBazar()">বাজার যোগ করুন</button>
+    </div>
+    <div class="card member-view">
+      <span class="read-only-badge">📖 শুধু দেখার জন্য</span>
+      <h2>বাজার তালিকা</h2>
+      <div class="month-selector">
+        <select id="bazarMonth"></select>
+      </div>
+      <div id="bazarTable"></div>
+    </div>
+  </div>
+
+  <div id="deposit" class="section">
+    <div class="card admin-only">
+      <h2>জমা (ডিপোজিট) এন্ট্রি</h2>
+      <label>তারিখ</label>
+      <input type="date" id="depositDate">
+      <label>সদস্য</label>
+      <select id="depositPerson"></select>
+      <label>টাকা</label>
+      <input type="number" id="depositAmount" placeholder="0">
+      <button class="action" onclick="addDeposit()">জমা যোগ করুন</button>
+    </div>
+    <div class="card member-view">
+      <span class="read-only-badge">📖 শুধু দেখার জন্য</span>
+      <h2>জমার তালিকা</h2>
+      <div class="month-selector">
+        <select id="depositMonth"></select>
+      </div>
+      <div id="depositTable"></div>
+    </div>
+  </div>
+
+  <div id="report" class="section">
+    <div class="card">
+      <h2>মাসিক হিসাব</h2>
+      <div class="month-selector">
+        <select id="reportMonth" onchange="renderReport()"></select>
+        <button class="action small no-print" onclick="window.print()">🖨️ প্রিন্ট</button>
+      </div>
+      <div id="reportSummary"></div>
+      <div id="reportDetails"></div>
+    </div>
+  </div>
+
+  <div id="hisab" class="section">
+    <div class="card">
+      <h2>📊 বিভাগ অনুযায়ী হিসাব</h2>
+      <div class="month-selector">
+        <select id="hisabMonth" onchange="renderHisab()"></select>
+        <button class="action small no-print" onclick="window.print()">🖨️ প্রিন্ট</button>
+      </div>
+      <div id="hisabSummary"></div>
+      <div id="hisabDetails"></div>
+    </div>
+  </div>
+
+  <div id="monthend" class="section">
+    <div class="card admin-only no-print">
+      <h2>মাস শেষের রিপোর্ট সেটিংস</h2>
+      <div class="two-col">
+        <div><label>মাসের নাম</label><input type="text" id="meMonthName" placeholder="যেমন: নভেম্বর"></div>
+        <div><label>ম্যানেজারের নাম</label><input type="text" id="meManager" placeholder="যেমন: করিম সাহেব"></div>
+      </div>
+      <div class="two-col" style="margin-top:10px;">
+        <div><label>শুরুর তারিখ</label><input type="date" id="meStartDate"></div>
+        <div><label>শেষ তারিখ</label><input type="date" id="meEndDate"></div>
+      </div>
+      <button class="action" onclick="generateMonthEnd()" style="margin-top:15px;">রিপোর্ট তৈরি করুন</button>
+    </div>
+    <div id="monthEndReport"></div>
+  </div>
+
+  <div id="history" class="section">
+    <div class="card">
+      <h2>সব মাসের সারাংশ</h2>
+      <div id="allMonthsSummary"></div>
+    </div>
+    <div class="card">
+      <h2>সব মাসে বিস্তারিত হিসাব</h2>
+      <div id="allMonthsDetails"></div>
+    </div>
+    <div class="card admin-only no-print">
+      <h2>ব্যাকআপ / রিস্টোর</h2>
+      <button class="action" onclick="exportData()">📥 ডাটা ডাউনলোড (JSON)</button>
+      <label style="margin-top:10px;">পূর্বের ডাটা আপলোড করুন</label>
+      <input type="file" id="importFile" accept=".json" onchange="importData(this)">
+      <button class="action danger" onclick="clearAll()" style="margin-top:10px;">🗑️ সব ডাটা মুছে ফেলুন</button>
+    </div>
+  </div>
+
+  <div id="settings" class="section">
+    <div class="card admin-only">
+      <h2>⚙️ ম্যানেজার সেটিংস</h2>
+      <div class="settings-box">
+        <h3>👤 ম্যানেজার লগইন পরিবর্তন</h3>
+        <div class="current-cred">
+          <p><b>বর্তমান ম্যানেজার আইডি:</b> <span id="dispCurrentId">-</span></p>
+        </div>
+        <label>নতুন ম্যানেজার আইডি</label>
+        <input type="text" id="newId" placeholder="নতুন আইডি লিখুন">
+        <label>নতুন পাসওয়ার্ড</label>
+        <input type="password" id="newPass" placeholder="নতুন পাসওয়ার্ড লিখুন">
+        <label>পাসওয়ার্ড আবার লিখুন</label>
+        <input type="password" id="confirmPass" placeholder="পাসওয়ার্ড কনফার্ম করুন">
+        <button class="action" onclick="changeCredentials()">💾 ম্যানেজার আইডি/পাসওয়ার্ড সেভ করুন</button>
+        <p id="credMsg" style="text-align:center;margin-top:10px;font-weight:600;"></p>
+      </div>
+      <div class="settings-box">
+        <h3>🙋 সদস্য লগইন পাসওয়ার্ড সেট/পরিবর্তন</h3>
+        <div class="info-box">নিচে কনো সদস্য বেছে নিয়ে তার লগইন আইডি ও পাসওয়ার্ড সেট বা পরিবর্তন করুন।</div>
+        <label>সদস্য বাছুন</label>
+        <select id="settingsMemberSelect"></select>
+        <label>নতুন আইডি</label>
+        <input type="text" id="settingsMemberNewId" placeholder="নতুন আইডি">
+        <label>নতুন াসওয়ার্ড</label>
+        <input type="text" id="settingsMemberNewPass" placeholder="নতুন পাসওয়ার্ড">
+        <button class="action secondary" onclick="changeMemberCredentialsFromSettings()">💾 সদস্য পাসওয়ার্ড সেভ করুন</button>
+        <p id="memberCredMsg" style="text-align:center;margin-top:10px;font-weight:600;"></p>
+      </div>
+    </div>
+    <div class="card no-print">
+      <h2>🔒 অ্যাকাউন্ট</h2>
+      <button class="action secondary" onclick="doLogout()">লগআউট করুন</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ========== UTILITY ==========
+function $(id) { return document.getElementById(id); }
+const formatMonth = d => d.slice(0,7);
+const todayStr = () => new Date().toISOString().slice(0,10);
+const todayMonth = () => new Date().toISOString().slice(0,7);
+
+// ========== AUTH ==========
+const DEFAULT_ADMIN_ID = 'manager';
+const DEFAULT_ADMIN_PASS = 'manager';
+const ADMIN_CRED_KEY = 'akij_mass2_admin_cred';
+let currentRole = null;
+let currentMemberIdx = null;
+
+function getAdminCred() {
+  try {
+    const raw = localStorage.getItem(ADMIN_CRED_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.id && parsed.pass) return parsed;
+    }
+  } catch(e) {}
+  return { id: DEFAULT_ADMIN_ID, pass: DEFAULT_ADMIN_PASS };
+}
+function saveAdminCred(id, pass) {
+  localStorage.setItem(ADMIN_CRED_KEY, JSON.stringify({ id, pass }));
+}
+
+function setLoginType(type) {
+  document.querySelectorAll('.login-type-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  if (type === 'admin') {
+    $('adminLoginForm').classList.remove('hidden');
+    $('memberLoginForm').classList.add('hidden');
+  } else {
+    $('adminLoginForm').classList.add('hidden');
+    $('memberLoginForm').classList.remove('hidden');
+  }
+  $('loginError').style.display = 'none';
+}
+
+function showLoginError(msg, color) {
+  const el
